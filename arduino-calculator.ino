@@ -61,7 +61,9 @@ void setup() {
   beep();
 
   printMadita();
-  delay(3000);
+  delay(2000);
+  printLinnea();
+  delay(2000);
   lc.clearDisplay(0);
   lc.setDigit(0, 0, 0, false);
 }
@@ -80,8 +82,9 @@ void loop() {
 
   if (number > 0) {
     if (rfid.PICC_IsNewCardPresent()) {
-      reset();
       beep();
+      circlingAround();
+      reset();
     }
   }
 }
@@ -107,6 +110,33 @@ void printMadita() {
   lc.setRow(0, 1, 119);
 }
 
+void printLinnea() {
+  lc.setRow(0, 6, 14);
+  lc.setDigit(0, 5, 1, false);
+  lc.setRow(0, 4, 21);
+  lc.setRow(0, 3, 21);
+  lc.setRow(0, 2, 79);
+  lc.setRow(0, 1, 119);
+}
+
+void circlingAround() {
+  lc.clearDisplay(0);
+  for (int k = 0; k <= 2; k++) {
+    for (int i = 1; i < 7; i++) {
+      for (int j = 0; j <= 7; j++) {
+        lc.setRow(0, j, 126 - pow(2, i));
+      }
+      delay(70);
+    }
+  }
+
+  for (int i = 7; i >= 1; i--) {
+    lc.clearDisplay(0);
+    lc.setDigit(0, i, 0, false);
+    delay(50);
+  }
+}
+
 void printOnDisplay() {
   String data = String(number);
 
@@ -119,8 +149,7 @@ void printOnDisplay() {
     }
   } else {
     lc.clearDisplay(0);
-    int i;
-    for (i = 0; i <= data.length() - 1; i++) {
+    for (int i = 0; i <= data.length() - 1; i++) {
       lc.setChar(0, i, byte(data.charAt(data.length() - i - 1)), false);
     }
   }

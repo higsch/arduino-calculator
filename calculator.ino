@@ -26,7 +26,6 @@ byte colPins[COLS] = { 4, 5, 6, 7 }; // Connect keypad COL0, COL1 and COL2 to th
 
 // 7-segment display setup
 LedControl lc = LedControl(12, 11, 10, 1);
-unsigned long lc_delaytime = 250;
 
 // Some other stuff
 long num1, num2, number;

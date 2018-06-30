@@ -17,12 +17,9 @@
 // RFID reader
 MFRC522 rfid(SDA_PIN, RST_PIN);
 
-// Buzzer
-const int buzzer = 14;
-
 // Keypad definitions
-const byte ROWS = 4; // Four rows
-const byte COLS = 4; // Three columns
+const byte ROWS = 4; // four rows
+const byte COLS = 4; // four columns
 
 // Define the Keymap
 char keys[ROWS][COLS] = {
@@ -32,8 +29,8 @@ char keys[ROWS][COLS] = {
   {'*', '0', '#', 'D'}
 };
 
-byte rowPins[ROWS] = { 8, 9, 2, 3 }; // Connect keypad ROW0, ROW1, ROW2 and ROW3 to these Arduino pins.
-byte colPins[COLS] = { 4, 5, 6, 7 }; // Connect keypad COL0, COL1 and COL2 to these Arduino pins.
+byte rowPins[ROWS] = {8, 9, 2, 3}; // connect keypad ROW0, ROW1, ROW2 and ROW3 to these Arduino pins.
+byte colPins[COLS] = {4, 5, 6, 7}; // connect keypad COL0, COL1 and COL2 to these Arduino pins.
 
 // 7-segment display setup
 LedControl lc = LedControl(15, 16, 17, 1);
@@ -43,10 +40,9 @@ long num1, num2, number;
 char key, action;
 boolean result = false;
 
-Keypad kpd = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS); //  Create the Keypad
+Keypad kpd = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS); // create the Keypad
 
 void setup() {
-  //Serial.begin(9600);
   SPI.begin();
 
   rfid.PCD_Init();
@@ -55,10 +51,6 @@ void setup() {
   lc.clearDisplay(0);
   lc.shutdown(0, false);
   lc.setIntensity(0, 5);
-
-  // Connect buzzer
-  pinMode(buzzer, OUTPUT);
-  beep();
 
   printMadita();
   delay(2000);
@@ -69,7 +61,6 @@ void setup() {
 }
 
 void loop() {
-  
   key = kpd.getKey();
   
   if (key != NO_KEY) {
@@ -82,22 +73,15 @@ void loop() {
 
   if (number > 0) {
     if (rfid.PICC_IsNewCardPresent()) {
-      beep();
-      circlingAround();
       reset();
     }
   }
 }
 
-void beep() {
-  tone(buzzer, 1000);
-  delay(100);
-  noTone(buzzer);
-}
-
 void reset() {
   number = num1 = num2 = 0;
   result = false;
+  circlingAround();
   printOnDisplay();
 }
 
@@ -166,7 +150,6 @@ void printErrOnDisplay() {
 }
 
 void CalculateResult() {
-
   if (action == '+')
     number = num1 + num2;
   if (action == '-')
@@ -187,11 +170,9 @@ void CalculateResult() {
     
   printOnDisplay();
   num1 = num2 = 0;
-  
 }
 
 void DetectButtons() {
-
   if (key == '1') {
     if (number == 0)
       number = 1;
@@ -262,7 +243,7 @@ void DetectButtons() {
       number = (number * 10) + 9;
   }
 
-  if (key == '*') { // this is for cancelling
+  if (key == '*' && number > 0) { // this is for cancelling
     reset();
     return;
   }

@@ -32,7 +32,7 @@ char keys[ROWS][COLS] = {
   {'*', '0', '#', 'D'}
 };
 
-byte rowPins[ROWS] = { 9, 8, 2, 3 }; // Connect keypad ROW0, ROW1, ROW2 and ROW3 to these Arduino pins. // TODO: change pin 8->1 and 9->0, when Serial.begin() is out
+byte rowPins[ROWS] = { 8, 9, 2, 3 }; // Connect keypad ROW0, ROW1, ROW2 and ROW3 to these Arduino pins.
 byte colPins[COLS] = { 4, 5, 6, 7 }; // Connect keypad COL0, COL1 and COL2 to these Arduino pins.
 
 // 7-segment display setup

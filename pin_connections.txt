@@ -1,0 +1,29 @@
+# notation: from component to Arduino
+
+# keypad
+# rows (4x), columns (4x) from left to right on keypad (switch direction if sth weird happens)
+1 -> 8 # 1 and 2 initially placed on Arduino 0 and 1, but these ones can also be used as serial monitor
+2 -> 9
+3 -> 2
+4 -> 3
+5 -> 4
+6 -> 5
+7 -> 6
+8 -> 7
+
+# RFID reader (MRFC522)
+3.3V -> 3.3V
+RST -> 19 # = A5
+GND -> GND
+IRQ ->
+MISO -> 12
+MOSI -> 11
+SCK -> 13
+SDA -> 18
+
+# 7 segment display with 8 digits (MAX7219)
+VCC -> 5V
+GND -> GND
+DIN -> 15 # = A1
+CS -> 17 # = A3
+CLK -> 16 # = A2

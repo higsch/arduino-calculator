@@ -11,6 +11,10 @@
 #include <SPI.h>
 #include <MFRC522.h>
 
+#include <avr/interrupt.h>
+#include <avr/power.h>
+#include <avr/sleep.h>
+
 #define SDA_PIN 18
 #define RST_PIN 19
 
@@ -39,6 +43,9 @@ LedControl lc = LedControl(15, 16, 17, 1);
 long num1, num2, number;
 char key, action;
 boolean result = false;
+volatile long runtime = 0;
+long max_runtime = 300000; // 5 min
+byte interrupt_pin = 2;
 
 Keypad kpd = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS); // create the Keypad
 
@@ -58,12 +65,15 @@ void setup() {
   delay(2000);
   lc.clearDisplay(0);
   lc.setDigit(0, 0, 0, false);
+  runtime = millis();
 }
 
 void loop() {
   key = kpd.getKey();
   
   if (key != NO_KEY) {
+    // reset timer
+    runtime = millis();
     DetectButtons();
   }
   
@@ -76,6 +86,30 @@ void loop() {
       reset();
     }
   }
+
+  // check if max runtime has been exceeded (5 s)
+  if (millis() > runtime + max_runtime) {
+    sleepNow();
+  }
+
+  delay(100);
+}
+
+void sleepNow() {
+  // and forever until reset
+  lc.clearDisplay(0);
+  
+  // Choose our preferred sleep mode:
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+
+  // Set sleep enable (SE) bit:
+  sleep_enable();
+
+  // Put the device to sleep:
+  sleep_mode();
+
+  // Upon waking up, sketch continues from this point.
+  sleep_disable();
 }
 
 void reset() {

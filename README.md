@@ -1,7 +1,7 @@
 # arduino-calculator
 >Calculator software for Arduino
 
-It was spring 2018 and my four years old daughter came up with the idea of
+It was spring 2018 and my three years old daughter came up with the idea of
 building a cash register – on our own. To this end, we manufactured a wooden case
 with a built-in Arduino including display, keypad and RFID card reader.
 
